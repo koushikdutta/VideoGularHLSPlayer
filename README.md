@@ -1,2 +1,2 @@
 # VideoGularHLSPlayer
-VideoGular HLS Example
+VideoGular HLS Player Example

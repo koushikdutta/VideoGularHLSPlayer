@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>VideoGular Hls Plugin</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="style.css" rel="stylesheet" type="text/css"/>
+        <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <script src="bower_components/angular/angular.min.js" type="text/javascript"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.js" type="text/javascript"></script>
+    </head>
+    <body ng-app="myApp">
+
+        <div ng-controller="HomeCtrl as controller">
+            <div id="custom-search-input">
+                <div class="input-group col-md-12">
+                    <input type="text" class="form-control input-lg" ng-model="StreamUrl" placeholder="Type your m3u8 URL" required />
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="button" ng-click="controller.PlayVideo()">
+                            Play <i class="glyphicon glyphicon-play-circle"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="videogular-container">
+                <videogular vg-player-ready="controller.onPlayerReady($API)" 
+                            vg-complete="controller.onCompleteVideo()" 
+                            vg-theme="controller.config.theme.url" 
+                            vg-update-time="controller.onUpdateTime($currentTime, $duration)"
+                            vg-change-source="onSourceChange($source)" 
+                            vg-auto-play="config.autoPlay"
+                            vg-crossorigin="anonymous">
+                    <vg-media vg-src="controller.config.sources" vg-preload="controller.config.preload" vg-hls>
+                    </vg-media>
+
+                    <vg-controls>
+                        <vg-play-pause-button></vg-play-pause-button>
+                        <vg-time-display>{{ currentTime | date:'mm:ss':'+0000' }}</vg-time-display>
+                        <vg-scrub-bar>
+                            <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                        </vg-scrub-bar>
+                        <vg-time-display>{{ timeLeft | date:'mm:ss':'+0000' }}</vg-time-display>
+                        <vg-volume>
+                            <vg-mute-button></vg-mute-button>
+                            <vg-volume-bar></vg-volume-bar>
+                        </vg-volume>
+                        <vg-fullscreen-button></vg-fullscreen-button>
+                    </vg-controls>
+
+                    <vg-overlay-play></vg-overlay-play>
+                    <vg-buffering></vg-buffering>
+                    <vg-poster vg-url="controller.config.plugins.poster"></vg-poster>
+                </videogular>
+            </div>
+        </div>
+        <script src="bower_components/videogular/videogular.min.js" type="text/javascript"></script>
+        <script src="bower_components/videogular-controls/vg-controls.min.js" type="text/javascript"></script>
+        <script src="bower_components/videogular-overlay-play/vg-overlay-play.min.js" type="text/javascript"></script>
+        <script src="bower_components/videogular-poster/vg-poster.min.js" type="text/javascript"></script>
+        <script src="bower_components/videogular-buffering/vg-buffering.min.js" type="text/javascript"></script>
+        <script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+        <script src="bower_components/hls.js/dist/hls.min.js" type="text/javascript"></script>
+        <script src="bower_components/videogular-hls/vg-hls.min.js" type="text/javascript"></script>
+        <script src="app.js" type="text/javascript"></script>
+    </body>
+</html>
