@@ -22,48 +22,52 @@ myApp.controller('HomeCtrl',
                 controller.state = null;
                 controller.API = null;
                 controller.currentVideo = 0;
-
+                //OnPlayerReady
                 controller.onPlayerReady = function (API) {
                     controller.API = API;
+                    console.log("OnPlayerReady Called");
                 };
-
+                //OnCompleteVideo
                 controller.onCompleteVideo = function () {
                     controller.isCompleted = true;
+                    console.log("OnCompleteVideo Called");
                 };
-
+                //OnError
                 controller.onError = function (event) {
                     console.log("VIDEOGULAR ERROR EVENT", event);
                 };
-
-
+                //OnUpdateState
                 controller.onUpdateState = function (state) {
                     controller.state = state;
+                    console.log("OnUpdateState Called");
                 };
-
+                //OnUpdateTime
                 controller.onUpdateTime = function (currentTime, totalTime) {
                     controller.currentTime = currentTime;
                     controller.totalTime = totalTime;
                     console.log("[OnUpdateTime] CurrentTime:" + currentTime + ", Duration:" + totalTime);
                 };
-
+                //OnSeeking
                 controller.onSeeking = function (currentTime, duration) {
                     controller.seeking.currentTime = currentTime;
                     controller.seeking.duration = duration;
                     console.log("[OnSeeking] CurrentTime:" + currentTime + ", Duration:" + duration);
                 };
-
+                //OnSeeked
                 controller.onSeeked = function (currentTime, duration) {
                     controller.seeked.currentTime = currentTime;
                     controller.seeked.duration = duration;
                     console.log("[OnSeeked] CurrentTime:" + currentTime + ", Duration:" + duration);
                 };
-
+                //OnUpdateVolume
                 controller.onUpdateVolume = function (newVol) {
                     controller.volume = newVol;
+                    console.log("OnUpdateVolume Called. New Volumn:", newVol);
                 };
-
+                //OnUpdatePlayback
                 controller.onUpdatePlayback = function (newSpeed) {
                     controller.API.playback = newSpeed;
+                    console.log("OnUpdatePlayback Called. New Speed:", newSpeed);
                 };
 
                 controller.medias = [
