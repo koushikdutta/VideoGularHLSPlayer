@@ -39,7 +39,7 @@ myApp.controller('HomeCtrl',
                 //OnUpdateState
                 controller.onUpdateState = function (state) {
                     controller.state = state;
-                    console.log("OnUpdateState Called");
+                    console.log("OnUpdateState Called", state);
                 };
                 //OnUpdateTime
                 controller.onUpdateTime = function (currentTime, totalTime) {
