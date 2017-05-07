@@ -1,0 +1,9 @@
+{
+  "name": "videogular-hls",
+  "version": "1.0.0",
+  "main": "./vg-hls.js",
+  "dependencies": {
+    "videogular": "~1.4.0",
+    "hls.js": "https://github.com/dailymotion/hls.js.git#~0.3.13"
+  }
+}
