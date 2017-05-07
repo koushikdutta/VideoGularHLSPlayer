@@ -22,35 +22,54 @@
                     </span>
                 </div>
             </div>
-            <div class="videogular-container">
-                <videogular vg-player-ready="controller.onPlayerReady($API)" 
-                            vg-complete="controller.onCompleteVideo()" 
-                            vg-theme="controller.config.theme.url" 
-                            vg-update-time="controller.onUpdateTime($currentTime, $duration)"
-                            vg-change-source="onSourceChange($source)" 
-                            vg-auto-play="config.autoPlay"
-                            vg-crossorigin="anonymous">
-                    <vg-media vg-src="controller.config.sources" vg-preload="controller.config.preload" vg-hls>
-                    </vg-media>
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Player
+                    </div>
+                    <div class="panel-body custom-panel-player">
+                        <div class="videogular-container" set-height>
+                            <videogular vg-player-ready="controller.onPlayerReady($API)" 
+                                        vg-complete="controller.onCompleteVideo()" 
+                                        vg-theme="controller.config.theme.url" 
+                                        vg-update-time="controller.onUpdateTime($currentTime, $duration)"
+                                        vg-change-source="onSourceChange($source)" 
+                                        vg-auto-play="config.autoPlay"
+                                        vg-crossorigin="anonymous">
+                                <vg-media vg-src="controller.config.sources" vg-preload="controller.config.preload" vg-hls>
+                                </vg-media>
 
-                    <vg-controls>
-                        <vg-play-pause-button></vg-play-pause-button>
-                        <vg-time-display>{{ currentTime | date:'mm:ss':'+0000' }}</vg-time-display>
-                        <vg-scrub-bar>
-                            <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-                        </vg-scrub-bar>
-                        <vg-time-display>{{ timeLeft | date:'mm:ss':'+0000' }}</vg-time-display>
-                        <vg-volume>
-                            <vg-mute-button></vg-mute-button>
-                            <vg-volume-bar></vg-volume-bar>
-                        </vg-volume>
-                        <vg-fullscreen-button></vg-fullscreen-button>
-                    </vg-controls>
+                                <vg-controls>
+                                    <vg-play-pause-button></vg-play-pause-button>
+                                    <vg-time-display>{{ currentTime | date:'mm:ss':'+0000' }}</vg-time-display>
+                                    <vg-scrub-bar>
+                                        <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                                    </vg-scrub-bar>
+                                    <vg-time-display>{{ timeLeft | date:'mm:ss':'+0000' }}</vg-time-display>
+                                    <vg-volume>
+                                        <vg-mute-button></vg-mute-button>
+                                        <vg-volume-bar></vg-volume-bar>
+                                    </vg-volume>
+                                    <vg-fullscreen-button></vg-fullscreen-button>
+                                </vg-controls>
 
-                    <vg-overlay-play></vg-overlay-play>
-                    <vg-buffering></vg-buffering>
-                    <vg-poster vg-url="controller.config.plugins.poster"></vg-poster>
-                </videogular>
+                                <vg-overlay-play></vg-overlay-play>
+                                <vg-buffering></vg-buffering>
+                                <vg-poster vg-url="controller.config.plugins.poster"></vg-poster>
+                            </videogular>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Console Log
+                    </div>
+                    <div class="panel-body custom-panel-log" set-height>
+                        {{player_log}}
+                    </div>
+                </div>
             </div>
         </div>
         <script src="bower_components/videogular/videogular.min.js" type="text/javascript"></script>
