@@ -67,7 +67,7 @@
                         Console Log
                     </div>
                     <div class="panel-body custom-panel-log" set-height>
-                        {{player_log}}
+                        <div ng-repeat="player_log in player_logs"><span class="badge">{{player_log.currentDate| date:'HH:mm:ss'}}</span> {{player_log.data}}</div>
                     </div>
                 </div>
             </div>

@@ -57,7 +57,9 @@ myApp.controller('HomeCtrl',
                 //OnPlayerReady
                 controller.onPlayerReady = function (API) {
                     controller.API = API;
-                    $scope.player_log = "OnPlayerReady Called";
+                    PlayerLog("OnPlayerReady Called");
+                    $scope.StreamUrl = $sce.valueOf(controller.medias[0].sources[0].src);
+                    PlayerLog("Playing Url: " + $sce.valueOf(controller.medias[0].sources[0].src));
                 };
                 //OnCompleteVideo
                 controller.onCompleteVideo = function () {
@@ -144,10 +146,13 @@ myApp.controller('HomeCtrl',
                     controller.config.sources = controller.medias[0].sources;
                     $timeout(controller.API.play.bind(controller.API), 100);
                 };
-
+                var _printLog = [];
                 var PlayerLog = function (data) {
                     //new Date().getTime() +
-                    $scope.player_log = data + "\n" + $scope.player_log;
+                    //$scope.player_log = data + "\n" + $scope.player_log;
+                    var _temp = {currentDate: new Date().getTime(), data: data}
+                    _printLog.push(_temp);
+                    $scope.player_logs = _printLog.reverse();
                 }
             }]
         );
