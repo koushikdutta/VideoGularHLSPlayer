@@ -22,7 +22,7 @@ myApp.directive('setHeight', ['$window', function ($window) {
             restrict: 'A'
         };
         function link(scope, element, attrs) {
-            scope.setWindowDimensions = function (element) {
+            scope.setWindowAreas = function (element) {
                 var deltaHeight = 150;
                 var elementHeight = $window.innerHeight;
                 var heightUnit = (elementHeight === $window.innerHeight) ? "px" : "%";
@@ -33,10 +33,8 @@ myApp.directive('setHeight', ['$window', function ($window) {
             };
 
             function onResize() {
-                {
-                    scope.setWindowDimensions(element);
-                    scope.$digest();
-                }
+                scope.setWindowAreas(element);
+                scope.$digest();
             }
             function cleanUp() {
                 angular.element($window).off('resize', onResize);
@@ -50,20 +48,35 @@ myApp.directive('setHeight', ['$window', function ($window) {
 
 myApp.controller('HomeCtrl',
         ["$scope", "$sce", "$timeout", function ($scope, $sce, $timeout) {
+                // <editor-fold defaultstate="collapsed" desc=" -- Player Init Variable -- ">
                 var controller = this;
                 controller.state = null;
                 controller.API = null;
+                var _printLog = [];
                 controller.currentVideo = 0;
+                $scope.StreamUrl = "http://content.jwplatform.com/manifests/vM7nH0Kl.m3u8";
+                controller.medias = [
+                    {
+                        sources: [
+                            {src: $sce.trustAsResourceUrl($scope.StreamUrl), type: "application/x-mpegurl"}
+                        ]
+                    }
+                ];
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc=" -- Player API's -- ">
                 //OnPlayerReady
                 controller.onPlayerReady = function (API) {
                     controller.API = API;
                     PlayerLog("OnPlayerReady Called");
                     $scope.StreamUrl = $sce.valueOf(controller.medias[0].sources[0].src);
                     PlayerLog("Playing Url: " + $sce.valueOf(controller.medias[0].sources[0].src));
+                    PlayerButtonState();
                 };
                 //OnCompleteVideo
                 controller.onCompleteVideo = function () {
                     controller.isCompleted = true;
+
                     PlayerLog("OnCompleteVideo Called");
                 };
                 //OnError
@@ -103,15 +116,9 @@ myApp.controller('HomeCtrl',
                     controller.API.playback = newSpeed;
                     PlayerLog("OnUpdatePlayback Called. New Speed:", newSpeed);
                 };
+                // </editor-fold>
 
-                controller.medias = [
-                    {
-                        sources: [
-                            {src: $sce.trustAsResourceUrl("http://content.jwplatform.com/manifests/vM7nH0Kl.m3u8"), type: "application/x-mpegurl"}
-                        ]
-                    }
-                ];
-
+                // <editor-fold defaultstate="collapsed" desc=" -- Player Config Variable -- ">
                 controller.config = {
                     playsInline: false,
                     nativeFullscreen: true,
@@ -132,27 +139,41 @@ myApp.controller('HomeCtrl',
                         analytics: {}
                     }
                 };
+                // </editor-fold>
 
+                // <editor-fold defaultstate="collapsed" desc=" -- App Events -- ">
                 controller.PlayVideo = function () {
-                    controller.API.stop();
-                    PlayerLog("Video Url: ", $scope.StreamUrl);
-                    controller.medias = [
-                        {
-                            sources: [
-                                {src: $scope.StreamUrl, type: "application/x-mpegurl"}
-                            ]
-                        }
-                    ];
-                    controller.config.sources = controller.medias[0].sources;
-                    $timeout(controller.API.play.bind(controller.API), 100);
+                    if ($scope.StreamState == "Play") {
+                        controller.API.stop();
+                        PlayerLog("Playing Video Url: ", $scope.StreamUrl);
+                        controller.config.sources = controller.medias[0].sources;
+                        $timeout(controller.API.play.bind(controller.API), 100);
+                        PlayerButtonState("stop");
+                    } else {
+                        controller.API.stop();
+                        PlayerLog("Stop current Video.");
+                        PlayerButtonState("play");
+                    }
                 };
-                var _printLog = [];
+
                 var PlayerLog = function (data) {
-                    //new Date().getTime() +
-                    //$scope.player_log = data + "\n" + $scope.player_log;
                     var _temp = {currentDate: new Date().getTime(), data: data}
                     _printLog.push(_temp);
                     $scope.player_logs = _printLog.reverse();
-                }
+                };
+
+                var PlayerButtonState = function (state) {
+                    if (typeof state == 'undefined') {
+                        $scope.StreamState = "Play";
+                        $scope.StreamIcon = "play";
+                    } else if (state == "stop") {
+                        $scope.StreamState = "Stop";
+                        $scope.StreamIcon = "stop";
+                    } else if (state == "play") {
+                        $scope.StreamState = "Play";
+                        $scope.StreamIcon = "play";
+                    }
+                };
+                // </editor-fold>
             }]
         );

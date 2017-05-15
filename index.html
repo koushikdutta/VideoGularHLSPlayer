@@ -17,7 +17,7 @@
                     <input type="text" class="form-control input-lg" ng-model="StreamUrl" placeholder="Type your m3u8 URL" required />
                     <span class="input-group-btn">
                         <button class="btn btn-info btn-lg" type="button" ng-click="controller.PlayVideo()">
-                            Play <i class="glyphicon glyphicon-play-circle"></i>
+                            {{StreamState}} <i class="glyphicon glyphicon-{{StreamIcon}}-circle"></i>
                         </button>
                     </span>
                 </div>
