@@ -7,6 +7,7 @@ var myApp = angular.module('myApp',
             "com.2fdevs.videogular.plugins.overlayplay",
             "com.2fdevs.videogular.plugins.poster",
             "com.2fdevs.videogular.plugins.buffering",
+            "uk.ac.soton.ecs.videogular.plugins.cuepoints",
             "com.2fdevs.videogular.plugins.hls"
         ]
         );
@@ -48,20 +49,13 @@ myApp.directive('setHeight', ['$window', function ($window) {
 
 myApp.controller('HomeCtrl',
         ["$scope", "$sce", "$timeout", function ($scope, $sce, $timeout) {
+
                 // <editor-fold defaultstate="collapsed" desc=" -- Player Init Variable -- ">
                 var controller = this;
                 controller.state = null;
                 controller.API = null;
                 var _printLog = [];
                 controller.currentVideo = 0;
-                $scope.StreamUrl = "http://content.jwplatform.com/manifests/vM7nH0Kl.m3u8";
-                controller.medias = [
-                    {
-                        sources: [
-                            {src: $sce.trustAsResourceUrl($scope.StreamUrl), type: "application/x-mpegurl"}
-                        ]
-                    }
-                ];
                 // </editor-fold>
 
                 // <editor-fold defaultstate="collapsed" desc=" -- Player API's -- ">
@@ -69,14 +63,16 @@ myApp.controller('HomeCtrl',
                 controller.onPlayerReady = function (API) {
                     controller.API = API;
                     PlayerLog("OnPlayerReady Called");
-                    $scope.StreamUrl = $sce.valueOf(controller.medias[0].sources[0].src);
-                    PlayerLog("Playing Url: " + $sce.valueOf(controller.medias[0].sources[0].src));
+                    PlayerLog("[onPlayerReady] Playing Url: " + $sce.valueOf(controller.config.sources[0].src));
                     PlayerButtonState();
+                };
+                //OnStartPlaying
+                controller.onStartPlaying = function () {
+                    PlayerLog("onStartPlaying Called");
                 };
                 //OnCompleteVideo
                 controller.onCompleteVideo = function () {
                     controller.isCompleted = true;
-
                     PlayerLog("OnCompleteVideo Called");
                 };
                 //OnError
@@ -119,13 +115,20 @@ myApp.controller('HomeCtrl',
                 // </editor-fold>
 
                 // <editor-fold defaultstate="collapsed" desc=" -- Player Config Variable -- ">
+                var GetVideoUrl = function () {
+                    if (typeof $scope.StreamUrl === 'undefined' || $scope.StreamUrl === "")
+                    {
+                        $scope.StreamUrl = "http://content.jwplatform.com/manifests/vM7nH0Kl.m3u8";
+                    }
+                    return  [{src: $sce.trustAsResourceUrl($scope.StreamUrl), type: "application/x-mpegurl"}];
+                };
                 controller.config = {
                     playsInline: false,
                     nativeFullscreen: true,
-                    autoHide: false,
-                    autoHideTime: 3000,
+                    autoHide: true,
+                    autoHideTime: 5000,
                     autoPlay: false,
-                    sources: controller.medias[0].sources,
+                    sources: GetVideoUrl(),
                     loop: false,
                     preload: "auto",
                     controls: false,
@@ -136,7 +139,16 @@ myApp.controller('HomeCtrl',
                     plugins: {
                         poster: "videogular.png",
                         ads: {},
-                        analytics: {}
+                        analytics: {},
+                        cuepoints: {
+                            theme: {
+                                url: "bower_components/videogular-cuepoints/cuepoints.css",
+                            },
+                            points: [
+                                {time: 100},
+                                {time: 450}
+                            ],
+                        }
                     }
                 };
                 // </editor-fold>
@@ -145,8 +157,8 @@ myApp.controller('HomeCtrl',
                 controller.PlayVideo = function () {
                     if ($scope.StreamState == "Play") {
                         controller.API.stop();
-                        PlayerLog("Playing Video Url: ", $scope.StreamUrl);
-                        controller.config.sources = controller.medias[0].sources;
+                        PlayerLog("[PlayVideo] Playing Video Url: " + $scope.StreamUrl);
+                        controller.config.sources = GetVideoUrl();
                         $timeout(controller.API.play.bind(controller.API), 100);
                         PlayerButtonState("stop");
                     } else {
