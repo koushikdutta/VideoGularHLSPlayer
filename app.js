@@ -9,14 +9,17 @@ var myApp = angular.module('myApp',
             "com.2fdevs.videogular.plugins.buffering",
             "uk.ac.soton.ecs.videogular.plugins.cuepoints",
             "com.2fdevs.videogular.plugins.hls"
-        ]
-        );
+        ]);
+
+// <editor-fold defaultstate="collapsed" desc=" -- $httpProvider -- ">
 myApp.config(['$httpProvider', function ($httpProvider) {
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
     }
 ]);
+// </editor-fold>
 
+// <editor-fold defaultstate="collapsed" desc=" -- Set-Height Directive -- ">
 myApp.directive('setHeight', ['$window', function ($window) {
         return {
             link: link,
@@ -46,6 +49,7 @@ myApp.directive('setHeight', ['$window', function ($window) {
             scope.$on('$destroy', cleanUp);
         }
     }]);
+// </editor-fold>
 
 myApp.controller('HomeCtrl',
         ["$scope", "$sce", "$timeout", function ($scope, $sce, $timeout) {
@@ -63,7 +67,7 @@ myApp.controller('HomeCtrl',
                 controller.onPlayerReady = function (API) {
                     controller.API = API;
                     PlayerLog("OnPlayerReady Called");
-                    PlayerLog("[onPlayerReady] Playing Url: " + $sce.valueOf(controller.config.sources[0].src));
+                    PlayerLog("[onPlayerReady] Playing Url: " + $sce.valueOf(controller.config.sources[controller.currentVideo].src));
                     PlayerButtonState();
                 };
                 //OnStartPlaying
@@ -134,20 +138,21 @@ myApp.controller('HomeCtrl',
                     controls: false,
                     theme: {
                         url: "videogular.min.css"
-                    }
-                    ,
+                    },
                     plugins: {
                         poster: "videogular.png",
                         ads: {},
                         analytics: {},
                         cuepoints: {
                             theme: {
-                                url: "bower_components/videogular-cuepoints/cuepoints.css",
+                                url: "bower_components/videogular-cuepoints/cuepoints.css"
                             },
                             points: [
                                 {time: 100},
-                                {time: 450}
-                            ],
+                                {time: 210},
+                                {time: 300},
+                                {time: 400}
+                            ]
                         }
                     }
                 };
@@ -155,7 +160,7 @@ myApp.controller('HomeCtrl',
 
                 // <editor-fold defaultstate="collapsed" desc=" -- App Events -- ">
                 controller.PlayVideo = function () {
-                    if ($scope.StreamState == "Play") {
+                    if ($scope.StreamState === "Play") {
                         controller.API.stop();
                         PlayerLog("[PlayVideo] Playing Video Url: " + $scope.StreamUrl);
                         controller.config.sources = GetVideoUrl();
@@ -169,19 +174,19 @@ myApp.controller('HomeCtrl',
                 };
 
                 var PlayerLog = function (data) {
-                    var _temp = {currentDate: new Date().getTime(), data: data}
+                    var _temp = {currentDate: new Date().getTime(), data: data};
                     _printLog.push(_temp);
                     $scope.player_logs = _printLog.reverse();
                 };
 
                 var PlayerButtonState = function (state) {
-                    if (typeof state == 'undefined') {
+                    if (typeof state === 'undefined') {
                         $scope.StreamState = "Play";
                         $scope.StreamIcon = "play";
-                    } else if (state == "stop") {
+                    } else if (state === "stop") {
                         $scope.StreamState = "Stop";
                         $scope.StreamIcon = "stop";
-                    } else if (state == "play") {
+                    } else if (state === "play") {
                         $scope.StreamState = "Play";
                         $scope.StreamIcon = "play";
                     }
