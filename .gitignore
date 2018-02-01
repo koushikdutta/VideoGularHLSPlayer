@@ -1,6 +1,4 @@
 /node_modules
 /TestStream
-nbproject/private/*
-nbproject/project.properties
 *.m3u8
 *.ts
