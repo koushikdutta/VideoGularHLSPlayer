@@ -1,0 +1,39 @@
+{
+  "name": "videogularhlsplayer",
+  "version": "1.0.0",
+  "description": "This repository contains VideoGular and Hls based streaming player. Developer needs to be open the solution based on the development platform.",
+  "main": "index.html",
+  "dependencies": {
+    "angular": "^1.6.1",
+    "angular-sanitize": "^1.6.1",
+    "bootstrap": "^3.3.7",
+    "hls.js": "^0.8.9",
+    "jquery": "^2.1.3",
+    "videogular": "^1.4.4",
+    "videogular-buffering": "^1.4.4",
+    "videogular-controls": "^1.4.4",
+    "videogular-overlay-play": "^1.4.4",
+    "videogular-poster": "^1.4.4",
+    "videogular-themes-default": "^1.4.4"
+  },
+  "devDependencies": {
+    "http-server": "^0.7.4",
+    "live-reload": "^0.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "open": "opener http://localhost:7200/",
+    "serve": "http-server -p 7200 .",
+    "dev": "npm run serve -s & parallelshell 'npm run live-reload -s'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koushikdutta/VideoGularHLSPlayer.git"
+  },
+  "author": "Koushik Dutta <koushik.dutta@rebaca.com>",
+  "license": "MSI",
+  "bugs": {
+    "url": "https://github.com/koushikdutta/VideoGularHLSPlayer/issues"
+  },
+  "homepage": "https://github.com/koushikdutta/VideoGularHLSPlayer#readme"
+}
