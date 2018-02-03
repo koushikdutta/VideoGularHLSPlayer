@@ -145,7 +145,7 @@ myApp.controller('HomeCtrl',
                         analytics: {},
                         cuepoints: {
                             theme: {
-                                url: "bower_components/videogular-cuepoints/cuepoints.css"
+                                url: "lib/videogular-cuepoints/cuepoints.css"
                             },
                             points: [
                                 {time: 100},
